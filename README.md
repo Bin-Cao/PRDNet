@@ -265,76 +265,6 @@ Training logs and checkpoints are saved to:
 └── training_curves.png  # Training visualization
 ```
 
-## 📚 API Documentation
-
-### Core Classes
-
-#### `Prdnet` - Main Model Class
-
-```python
-from prdnet.model import Prdnet, PrdnetConfig
-
-config = PrdnetConfig(
-    name="prdnet",
-    conv_layers=6,              # Number of graph convolution layers
-    node_features=256,          # Node feature dimensions
-    edge_features=256,          # Edge feature dimensions
-    fc_layers=2,                # Number of fully connected layers
-    fc_features=512,            # FC layer dimensions
-    output_features=1,          # Output dimensions
-    use_diffraction=True,       # Enable diffraction integration
-    diffraction_max_hkl=5,      # Maximum HKL index for diffraction
-    dropout=0.1,                # Dropout rate
-    use_residual_connections=True,  # Enable residual connections
-    activation="silu"           # Activation function
-)
-
-model = Prdnet(config)
-```
-
-#### `PrdnetTrainer` - Training Interface
-
-```python
-from trainer import PrdnetTrainer, create_trainer_config
-
-# Create training configuration
-config = create_trainer_config(
-    train_db_path="train.db",
-    target_property="formation_energy",
-    epochs=200,
-    batch_size=64,
-    learning_rate=0.001,
-    use_cache=True,
-    cache_dir="./cache"
-)
-
-# Initialize trainer
-trainer = PrdnetTrainer(config)
-
-# Start training
-results = trainer.train(
-    train_db_path=config.train_db_path,
-    val_db_path=config.val_db_path
-)
-```
-
-#### `TrainingConfig` - Configuration Management
-
-```python
-from prdnet.config import TrainingConfig
-
-config = TrainingConfig(
-    dataset="dft_3d",
-    target="formation_energy_peratom",
-    atom_features="cgcnn",
-    neighbor_strategy="k-nearest",
-    epochs=100,
-    batch_size=32,
-    learning_rate=0.001,
-    model=PrdnetConfig(name="prdnet")
-)
-```
-
 ### Data Loading
 
 #### Working with ASE Databases
@@ -387,7 +317,7 @@ train_loader, val_loader, test_loader, prepare_batch, mean, std = get_train_val_
 
 ### Physics-Informed Diffraction Integration
 
-PRDNET's key innovation is the integration of X-ray diffraction physics:
+PRDNET's key innovation is the integration of Pseudo-particle-ray diffraction physics:
 
 ```python
 from prdnet.diffraction import DiffractionIntegration
@@ -434,10 +364,9 @@ config = TrainingConfig(
 
 PRDNET supports various crystal structure datasets:
 
-- **Materials Project**: Formation energies, band gaps, elastic properties
+- **Materials Project**: Formation energies, band gaps, elastic properties etc.
 - **JARVIS-DFT**: Comprehensive DFT calculations
-- **Custom ASE Databases**: Your own crystal structures
-- **OQMD**: Open Quantum Materials Database
+
 
 ### Data Format
 
@@ -451,14 +380,6 @@ db = connect("my_data.db")
 atoms = Atoms(...)  # Your crystal structure
 db.write(atoms, formation_energy=-2.5, band_gap=1.2)
 ```
-
-## 🚀 Performance Tips
-
-1. **Use GPU acceleration**: Ensure CUDA is available for training
-2. **Enable caching**: Use `use_cache=True` for repeated training
-3. **Distributed training**: Use multiple GPUs with `torchrun`
-4. **Batch size optimization**: Adjust based on GPU memory
-5. **Mixed precision**: Automatically enabled for better performance
 
 ## 🐛 Troubleshooting
 
@@ -495,10 +416,7 @@ If you use PRDNET in your research, please cite:
 ```bibtex
 @article{cao2024prdnet,
   title={PRDNET: Pseudo-particle Ray Diffraction Network for Crystal Property Prediction},
-  author={Cao, Bin and others},
-  journal={arXiv preprint},
-  year={2024},
-  note={Paper in preparation}
+  
 }
 ```
 
@@ -506,13 +424,7 @@ If you use PRDNET in your research, please cite:
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-### Quick Contribution Steps
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes and add tests
-4. Run tests: `pytest`
-5. Submit a pull request
 
 ## 📄 License
 
