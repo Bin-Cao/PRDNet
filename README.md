@@ -9,11 +9,11 @@
 - **Graph Neural Networks (GNNs)** for crystal structure representation
 - **Pseudo-particle Ray Diffraction** physics integration
 - **Advanced Transformer Attention** mechanisms
-- **Distributed Training** capabilities with intelligent data caching
+  
 
 ## 🚀 Key Features
 
-- **Physics-Informed Architecture**: Integrates X-ray diffraction physics directly into the neural network
+- **Physics-Informed Architecture**: Integrates Pseudo-particle Ray diffraction physics directly into the neural network
 - **Advanced GNN Design**: Custom transformer-based graph convolutions with multi-head attention
 - **High Performance**: Optimized for distributed training with automatic mixed precision
 - **Flexible Data Handling**: Supports ASE databases, JARVIS datasets, and custom crystal structures
