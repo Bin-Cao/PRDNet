@@ -364,8 +364,9 @@ config = TrainingConfig(
 
 PRDNET supports various crystal structure datasets:
 
-- **Materials Project**: Formation energies, band gaps, elastic properties etc.
-- **JARVIS-DFT**: Comprehensive DFT calculations
+- **[Materials Project](https://huggingface.co/datasets/caobin/CPPbenchmark)**
+- **JARVIS-DFT**
+- **MatBench**
 
 
 ### Data Format
