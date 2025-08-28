@@ -22,13 +22,13 @@
 ## 📊 Performance
 
 PRDNET achieves state-of-the-art performance on crystal property prediction benchmarks:
-- **Formation Energy**: MAE < 0.05 eV/atom on Materials Project dataset
+- **Formation Energy**: MAE < 0.03 eV/atom on Materials Project dataset
 - **Band Gap**: Accurate prediction across diverse crystal systems
-- **Mechanical Properties**: Superior performance on elastic moduli prediction
+- **Mechanical Properties**: Superior performance on kinds of moduli prediction
 
 ## 🔬 Scientific Background
 
-Traditional machine learning approaches for crystal property prediction rely solely on structural features. PRDNET introduces a novel paradigm by incorporating diffraction physics—the fundamental interaction between X-rays and crystal lattices—directly into the learning process. This physics-informed approach enables the model to understand the relationship between atomic arrangements and their measurable diffraction signatures, leading to more accurate and interpretable predictions.
+PRDNET introduces a novel paradigm by incorporating diffraction physics—the fundamental interaction between Pseudo-particle-rays and crystal lattices—directly into the learning process. This physics-informed approach enables the model to understand the relationship between atomic arrangements and their measurable diffraction signatures, leading to more accurate and interpretable predictions.
 
 
 ## 🛠️ Installation
