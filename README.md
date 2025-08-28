@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![arXiv](https://img.shields.io/badge/arXiv-coming_soon-b31b1b.svg)](https://arxiv.org/)
 
-**PRDNET** is a state-of-the-art physics-informed neural network that revolutionizes crystal property prediction by combining:
+**PRDNET** is a state-of-the-art physics-informed neural network that design for crystal property prediction by combining:
 - **Graph Neural Networks (GNNs)** for crystal structure representation
 - **Pseudo-particle Ray Diffraction** physics integration
 - **Advanced Transformer Attention** mechanisms
