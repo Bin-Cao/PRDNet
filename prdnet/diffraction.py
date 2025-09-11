@@ -1,9 +1,4 @@
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Diffraction Information Integration Module for Prdnet.
 This module implements crystal diffraction information extraction and integration
 inspired by prd_trainer.py. It calculates structure factors from crystal graphs

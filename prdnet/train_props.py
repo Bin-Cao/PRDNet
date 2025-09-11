@@ -1,9 +1,4 @@
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Helper function for high-throughput GNN trainings.
 Implementation based on the template of ALIGNN.
 """

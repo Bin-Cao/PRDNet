@@ -1,9 +1,4 @@
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Feature extraction utilities for Prdnet.
 Based on the code from: https://github.com/klicperajo/dimenet,
 https://github.com/rusty1s/pytorch_geometric/blob/master/torch_geometric/nn/models/dimenet_utils.py

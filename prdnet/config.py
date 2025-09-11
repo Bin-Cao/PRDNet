@@ -1,9 +1,4 @@
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Configuration models and validation for Prdnet.
 """
 

@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Prdnet Trainer with Data Caching - Provides training functionality
 for Prdnet models with data caching support. Supports ASE database files and
 configurable caching strategies.

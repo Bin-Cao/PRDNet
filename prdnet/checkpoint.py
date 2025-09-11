@@ -1,9 +1,4 @@
 """
-Author: Bin Cao (bcao686@connect.hkust-gz.edu.cn)
-Affiliations:
-- Hong Kong University of Science and Technology (Guangzhou)
-- City University of Hong Kong
-
 Description: Best Model Checkpoint Management Module for Prdnet.
 This module implements automatic saving and updating of model parameters based on
 validation performance. It tracks the best validation MAE and manages model checkpoints.

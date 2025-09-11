@@ -11,7 +11,7 @@
 - **Advanced Transformer Attention** mechanisms
   
 
-## 🚀 Key Features
+## Key Features
 
 - **Physics-Informed Architecture**: Integrates Pseudo-particle Ray diffraction physics directly into the neural network
 - **Advanced GNN Design**: Custom transformer-based graph convolutions with multi-head attention
@@ -19,19 +19,19 @@
 - **Flexible Data Handling**: Supports ASE databases, JARVIS datasets, and custom crystal structures
 - **Production Ready**: Comprehensive caching, checkpointing, and monitoring with WandB integration
 
-## 📊 Performance
+## Performance
 
 PRDNET achieves state-of-the-art performance on crystal property prediction benchmarks:
 - **Formation Energy**: MAE < 0.03 eV/atom on Materials Project dataset
 - **Band Gap**: Accurate prediction across diverse crystal systems
 - **Mechanical Properties**: Superior performance on kinds of moduli prediction
 
-## 🔬 Scientific Background
+## Background
 
 PRDNET introduces a novel paradigm by incorporating diffraction physics—the fundamental interaction between Pseudo-particle-rays and crystal lattices—directly into the learning process. This physics-informed approach enables the model to understand the relationship between atomic arrangements and their measurable diffraction signatures, leading to more accurate and interpretable predictions.
 
 
-## 🛠️ Installation
+## Installation
 
 ### Quick Install
 
@@ -114,7 +114,7 @@ if torch.cuda.is_available():
 "
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Basic Usage
 
@@ -183,7 +183,7 @@ results = trainer.train(
 )
 ```
 
-## 🎯 Training
+## Training
 
 ### Command Line Training
 
@@ -313,11 +313,11 @@ train_loader, val_loader, test_loader, prepare_batch, mean, std = get_train_val_
 
 
 
-## 🔧 Advanced Features
+## Advanced Features
 
 ### Physics-Informed Diffraction Integration
 
-PRDNET's key innovation is the integration of Pseudo-particle-ray diffraction physics:
+The integration of Pseudo-particle-ray diffraction physics:
 
 ```python
 from prdnet.diffraction import DiffractionIntegration
@@ -360,7 +360,7 @@ config = TrainingConfig(
 )
 ```
 
-## 📊 Datasets
+## Datasets
 
 PRDNET supports various crystal structure datasets:
 
@@ -381,7 +381,7 @@ atoms = Atoms(...)  # Your crystal structure
 db.write(atoms, formation_energy=-2.5, band_gap=1.2)
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -409,7 +409,7 @@ python trainer.py --use_cache True
 torchrun --nproc_per_node=4 trainer.py
 ```
 
-## 📖 Citation
+## Citation
 
 If you use PRDNET in your research, please cite:
 
@@ -420,17 +420,17 @@ If you use PRDNET in your research, please cite:
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Contact & Support
+## Contact & Support
 
 - **Author**: Bin Cao
 - **Email**: bcao686@connect.hkust-gz.edu.cn
@@ -445,7 +445,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 💬 Ask questions in [Discussions](https://github.com/your-username/PRDNET/discussions)
 - 📧 Email for collaboration inquiries
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - PyTorch Geometric team for excellent graph neural network tools
 - JARVIS team for materials science datasets and tools
