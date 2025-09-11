@@ -1,3 +1,5 @@
+**⭐ If you find PRDNET useful, please star the repository!**
+
 # PRDNET: Pseudo-particle Ray Diffraction Network
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -364,8 +366,9 @@ config = TrainingConfig(
 
 PRDNET supports various crystal structure datasets:
 
-- **Materials Project**: Formation energies, band gaps, elastic properties etc.
-- **JARVIS-DFT**: Comprehensive DFT calculations
+- **[Materials Project](https://huggingface.co/datasets/caobin/CPPbenchmark)**
+- **JARVIS-DFT**
+- **MatBench**
 
 
 ### Data Format
@@ -452,6 +455,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Materials Project for crystal structure databases
 - ASE developers for atomic simulation environment
 
----
 
-**⭐ If you find PRDNET useful, please star the repository!**
+
+
