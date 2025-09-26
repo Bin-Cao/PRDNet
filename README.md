@@ -1,6 +1,6 @@
-**⭐ If you find PRDNET useful, please star the repository!**
+**⭐ If you find PRDNet useful, please star the repository!**
 
-# PRDNET: Pseudo-particle Ray Diffraction Network
+# PRDNet: Pseudo-particle Ray Diffraction Network
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
