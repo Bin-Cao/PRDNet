@@ -5,7 +5,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![arXiv](https://img.shields.io/badge/arXiv-coming_soon-b31b1b.svg)](https://arxiv.org/)
+[![arXiv](https://img.shields.io/badge/arXiv.svg)](https://arxiv.org/pdf/2509.21778)
 
 **PRDNET** is a SOTA invariant neural network that design for crystal property prediction by combining:
 - **Graph Neural Networks (GNNs)** for crystal structure representation
@@ -196,8 +196,6 @@ python trainer.py \
     --batch_size 64 \
     --learning_rate 1e-4
 
-# Using console script (after installation)
-prdnet-train --epochs 100 --batch_size 32
 ```
 
 ### Distributed Training
@@ -283,12 +281,12 @@ db.write(atoms, formation_energy=-2.5)  # Add with target property
 
 # Train with ASE database
 python trainer.py 
-        --epochs 300
-        --train_db_path MP_100_bgfe_train.db,
-        --val_db_path MP_100_bgfe_val.db,
-        --test_db_path MP_100_bgfe_test.db,
-        --target_property formation_energy,
-        --cache_dir prdnet_cache,
+        --epochs 300 \
+        --train_db_path MP_100_bgfe_train.db \ 
+        --val_db_path MP_100_bgfe_val.db \
+        --test_db_path MP_100_bgfe_test.db \
+        --target_property formation_energy \
+        --cache_dir prdnet_cache
 ```
 
 
