@@ -1,13 +1,13 @@
-**⭐ If you find PRDNET useful, please star the repository!**
+**⭐ If you find PRDNet useful, please star the repository!**
 
-# PRDNET: Pseudo-particle Ray Diffraction Network
+# PRDNet: Pseudo-particle Ray Diffraction Network
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![arXiv](https://img.shields.io/badge/arXiv-coming_soon-b31b1b.svg)](https://arxiv.org/)
 
-**PRDNET** is a state-of-the-art physics-informed neural network that design for crystal property prediction by combining:
+**PRDNET** is a SOTA invariant neural network that design for crystal property prediction by combining:
 - **Graph Neural Networks (GNNs)** for crystal structure representation
 - **Pseudo-particle Ray Diffraction** physics integration
 - **Advanced Transformer Attention** mechanisms
@@ -18,19 +18,18 @@
 - **Physics-Informed Architecture**: Integrates Pseudo-particle Ray diffraction physics directly into the neural network
 - **Advanced GNN Design**: Custom transformer-based graph convolutions with multi-head attention
 - **High Performance**: Optimized for distributed training with automatic mixed precision
-- **Flexible Data Handling**: Supports ASE databases, JARVIS datasets, and custom crystal structures
 - **Production Ready**: Comprehensive caching, checkpointing, and monitoring with WandB integration
 
 ## Performance
 
-PRDNET achieves state-of-the-art performance on crystal property prediction benchmarks:
+PRDNet achieves state-of-the-art performance on crystal property prediction benchmarks:
 - **Formation Energy**: MAE < 0.03 eV/atom on Materials Project dataset
-- **Band Gap**: Accurate prediction across diverse crystal systems
+- **Band Gap**: MAE < 0.16 eV on Materials Project dataset 
 - **Mechanical Properties**: Superior performance on kinds of moduli prediction
 
 ## Background
 
-PRDNET introduces a novel paradigm by incorporating diffraction physics—the fundamental interaction between Pseudo-particle-rays and crystal lattices—directly into the learning process. This physics-informed approach enables the model to understand the relationship between atomic arrangements and their measurable diffraction signatures, leading to more accurate and interpretable predictions.
+PRDNet, a novel architecture that integrates graph embeddings with a learned pseudo-particle diffraction module. It generates synthetic diffraction patterns that are invariant to crystallographic symmetries.
 
 
 ## Installation
@@ -40,7 +39,7 @@ PRDNET introduces a novel paradigm by incorporating diffraction physics—the fu
 ```bash
 # Clone the repository
 git clone https://github.com/your-username/PRDNET.git
-cd PRDNET
+cd PRDNet
 
 # Install with pip
 pip install -e .
@@ -51,7 +50,7 @@ pip install -e .
 ```bash
 # Clone and install in development mode
 git clone https://github.com/your-username/PRDNET.git
-cd PRDNET
+cd PRDNet
 
 # Create conda environment
 conda create -n prdnet python=3.9 -y
@@ -65,8 +64,6 @@ pip install -e ".[dev]"
 ```
 
 ### Manual Installation
-
-If you prefer to install dependencies manually:
 
 #### 1. Environment Setup
 ```bash
@@ -108,7 +105,7 @@ python -c "
 import torch
 import prdnet
 from prdnet.model import Prdnet, PrdnetConfig
-print('✅ PRDNET installed successfully!')
+print('✅ PRDNet installed successfully!')
 print(f'PyTorch: {torch.__version__}')
 print(f'CUDA available: {torch.cuda.is_available()}')
 if torch.cuda.is_available():
@@ -252,7 +249,7 @@ wandb login
 
 2. **Training with WandB logging**:
 ```bash
-python prd_trainer.py --epochs 100
+python trainer.py --epochs 300
 # Training metrics will be automatically logged to WandB
 ```
 
@@ -276,91 +273,24 @@ from ase.db import connect
 from trainer import PrdnetTrainer
 
 # Your ASE database should contain crystal structures with target properties
-db = connect("my_crystals.db")
 
 # Example: Add a crystal structure to database
+"""
 from ase import Atoms
 atoms = Atoms(...)  # Your crystal structure
 db.write(atoms, formation_energy=-2.5)  # Add with target property
+"""
 
 # Train with ASE database
-config = create_trainer_config(
-    train_db_path="my_crystals.db",
-    target_property="formation_energy"
-)
-trainer = PrdnetTrainer(config)
-results = trainer.train()
+python trainer.py 
+        --epochs 300
+        --train_db_path MP_100_bgfe_train.db,
+        --val_db_path MP_100_bgfe_val.db,
+        --test_db_path MP_100_bgfe_test.db,
+        --target_property formation_energy,
+        --cache_dir prdnet_cache,
 ```
 
-#### Custom Datasets
-
-```python
-from prdnet.data import get_train_val_loaders
-
-# Load data with custom parameters
-train_loader, val_loader, test_loader, prepare_batch, mean, std = get_train_val_loaders(
-    dataset="custom",           # Use custom dataset
-    dataset_array=my_data,      # Your data array
-    target="my_property",       # Target property name
-    atom_features="cgcnn",      # Feature type
-    neighbor_strategy="k-nearest",
-    batch_size=32,
-    cutoff=8.0,                 # Cutoff radius for neighbors
-    max_neighbors=12,           # Maximum number of neighbors
-    use_lattice=True,           # Include lattice information
-    line_graph=True             # Use line graph representation
-)
-```
-
-
-
-
-## Advanced Features
-
-### Physics-Informed Diffraction Integration
-
-The integration of Pseudo-particle-ray diffraction physics:
-
-```python
-from prdnet.diffraction import DiffractionIntegration
-
-# Enable diffraction integration in model
-config = PrdnetConfig(
-    use_diffraction=True,
-    diffraction_max_hkl=5,      # Maximum Miller indices
-    diffraction_num_hkl=300     # Number of HKL reflections
-)
-
-# The model automatically computes structure factors
-# and integrates them with graph features
-model = Prdnet(config)
-```
-
-### Distributed Training with Caching
-
-```python
-# Automatic data caching for faster training
-config = create_trainer_config(
-    use_cache=True,
-    cache_dir="./prdnet_cache",
-    cache_format="pt",          # or "hdf5"
-    force_cache_rebuild=False
-)
-
-# Distributed training automatically handles caching
-# Only rank 0 generates cache, others wait and load
-```
-
-### Custom Property Prediction
-
-```python
-# Extend for new properties
-config = TrainingConfig(
-    target="my_custom_property",
-    classification=False,        # Set True for classification tasks
-    output_features=1           # Adjust for multi-output
-)
-```
 
 ## Datasets
 
@@ -414,12 +344,17 @@ torchrun --nproc_per_node=4 trainer.py
 
 ## Citation
 
-If you use PRDNET in your research, please cite:
+If you use PRDNet in your research, please cite:
 
 ```bibtex
-@article{cao2024prdnet,
-  title={PRDNET: Pseudo-particle Ray Diffraction Network for Crystal Property Prediction},
-  
+@misc{cao2025structureinvariantcrystalproperty,
+      title={Beyond Structure: Invariant Crystal Property Prediction with Pseudo-Particle Ray Diffraction}, 
+      author={Bin Cao and Yang Liu and Longhan Zhang and Yifan Wu and Zhixun Li and Yuyu Luo and Hong Cheng and Yang Ren and Tong-Yi Zhang},
+      year={2025},
+      eprint={2509.21778},
+      archivePrefix={arXiv},
+      primaryClass={cond-mat.mtrl-sci},
+      url={https://arxiv.org/abs/2509.21778}, 
 }
 ```
 

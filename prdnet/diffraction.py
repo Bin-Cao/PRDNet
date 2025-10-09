@@ -1,7 +1,7 @@
 """
 Description: Diffraction Information Integration Module for Prdnet.
 This module implements crystal diffraction information extraction and integration
-inspired by prd_trainer.py. It calculates structure factors from crystal graphs
+It calculates structure factors from crystal graphs
 and fuses this information with existing graph representations.
 
 Key Features:
@@ -37,30 +37,50 @@ class HKLSelector:
         self.hkl_indices = self._generate_hkl_indices()
     
     def _generate_hkl_indices(self) -> torch.Tensor:
-        """Generate diverse HKL indices avoiding redundancy."""
-        hkl_list = []
-        
-        # Generate all possible HKL combinations
+        """Generate symmetry-closed HKL indices ensuring closure under symmetry operations."""
+        import itertools
+
+        # Step 1: Generate initial set H₀ with basic constraints
+        initial_hkl_list = []
+
+        # Generate all possible HKL combinations for initial set
         for h in range(-self.max_hkl, self.max_hkl + 1):
             for k in range(-self.max_hkl, self.max_hkl + 1):
                 for l in range(-self.max_hkl, self.max_hkl + 1):
-                    # Skip (0,0,0) and apply symmetry reduction
+                    # Skip (0,0,0)
                     if h == 0 and k == 0 and l == 0:
                         continue
-                    
-                    # Apply Friedel's law: F(hkl) = F*(-h,-k,-l)
-                    # Keep only one of each Friedel pair
+
+                    # Apply basic Friedel's law to reduce initial set size
+                    # Keep only one of each Friedel pair for initial generation
                     if h > 0 or (h == 0 and k > 0) or (h == 0 and k == 0 and l > 0):
-                        hkl_list.append([h, k, l])
-        
-        # Convert to tensor and select diverse subset
-        all_hkl = torch.tensor(hkl_list, dtype=torch.float32)
-        
-        # Select diverse indices based on d-spacing distribution
+                        initial_hkl_list.append([h, k, l])
+
+        # Step 2: Apply symmetry closure to ensure H is closed under symmetry operations
+        # H = {±perm(h, k, l) : (h, k, l) ∈ H₀}
+        symmetry_closed_hkl = set()
+
+        for hkl in initial_hkl_list:
+            h, k, l = hkl
+
+            # Generate all permutations of (h, k, l)
+            for perm in itertools.permutations([h, k, l]):
+                # Apply both positive and negative (inversion symmetry)
+                symmetry_closed_hkl.add(tuple(perm))
+                symmetry_closed_hkl.add(tuple([-x for x in perm]))
+
+        # Convert back to list and remove (0,0,0) if it was added
+        symmetry_closed_hkl.discard((0, 0, 0))
+        all_hkl_list = list(symmetry_closed_hkl)
+
+        # Convert to tensor
+        all_hkl = torch.tensor(all_hkl_list, dtype=torch.float32)
+
+        # Step 3: Select diverse subset based on d-spacing distribution
         if len(all_hkl) > self.num_indices:
             # Calculate d-spacing for each HKL (assuming cubic lattice for selection)
             d_spacings = 1.0 / torch.sqrt(torch.sum(all_hkl**2, dim=1) + 1e-8)
-            
+
             # Sort by d-spacing and select evenly distributed indices
             sorted_indices = torch.argsort(d_spacings, descending=True)
             step = len(sorted_indices) // self.num_indices
@@ -68,17 +88,17 @@ class HKLSelector:
             selected_hkl = all_hkl[selected_indices]
         else:
             selected_hkl = all_hkl
-        
+
         return selected_hkl
 
 
 class StructureFactorCalculator(nn.Module):
-    """Calculate structure factors from crystal graph data."""
-    
+    """Calculate structure factors from crystal graph data with per-HKL form factors."""
+
     def __init__(self, hkl_indices: torch.Tensor, node_features: int = 256):
         """
-        Initialize structure factor calculator.
-        
+        Initialize structure factor calculator with per-HKL form factor learning.
+
         Args:
             hkl_indices: HKL indices for structure factor calculation
             node_features: Number of node features in the graph
@@ -86,66 +106,75 @@ class StructureFactorCalculator(nn.Module):
         super().__init__()
         self.register_buffer('hkl_indices', hkl_indices)
         self.node_features = node_features
-        
-        # Learnable atomic form factor approximation
-        self.atomic_form_factor_net = nn.Sequential(
-            nn.Linear(node_features, 128),
+        self.num_hkl = hkl_indices.shape[0]
+
+        # Per-HKL form factor network: f*ᵢ(H) = MLPform(h⁽ᴸ⁾ᵢ) ∈ ℝ^(Nhkl)
+        # This maps node embeddings to scattering strengths for each HKL index
+        self.form_factor_net = nn.Sequential(
+            nn.Linear(node_features, 256),
+            nn.LayerNorm(256),
             nn.SiLU(),
-            nn.Linear(128, 64),
+            nn.Dropout(0.1),
+            nn.Linear(256, 128),
+            nn.LayerNorm(128),
             nn.SiLU(),
-            nn.Linear(64, 1)
+            nn.Linear(128, self.num_hkl)  # Output dimension is Nhkl
         )
     
-    def forward(self, node_features: torch.Tensor, pos: torch.Tensor, 
+    def forward(self, node_features: torch.Tensor, pos: torch.Tensor,
                 batch: torch.Tensor, lattice: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Calculate structure factors for the given crystal structure.
-        
+        Calculate structure factors with per-HKL form factors.
+
         Args:
             node_features: Node features from graph [num_nodes, node_features]
             pos: Atomic positions [num_nodes, 3]
             batch: Batch indices [num_nodes]
             lattice: Lattice parameters [batch_size, 6] (optional)
-        
+
         Returns:
             Structure factor map [batch_size, num_hkl, 2] (real and imaginary parts)
         """
         batch_size = batch.max().item() + 1
         num_hkl = self.hkl_indices.shape[0]
         device = node_features.device
-        
-        # Calculate atomic form factors from node features
-        atomic_form_factors = self.atomic_form_factor_net(node_features).squeeze(-1)
-        
+
+        # Calculate per-HKL form factors from node features
+        # f*i(H) = MLPform(h(L)1) ∈ R^(Nhkl)
+        form_factors_per_hkl = self.form_factor_net(node_features)  # [num_nodes, num_hkl]
+
         # Initialize structure factor tensor
         structure_factors = torch.zeros(batch_size, num_hkl, 2, device=device)
-        
+
         # Calculate structure factors for each crystal in the batch
         for batch_idx in range(batch_size):
             # Get atoms for this crystal
             mask = batch == batch_idx
             if not mask.any():
                 continue
-                
+
             crystal_pos = pos[mask]  # [num_atoms_in_crystal, 3]
-            crystal_form_factors = atomic_form_factors[mask]  # [num_atoms_in_crystal]
-            
+            crystal_form_factors = form_factors_per_hkl[mask]  # [num_atoms_in_crystal, num_hkl]
+
             # Calculate structure factors for all HKL indices
-            # F(hkl) = sum_j f_j * exp(2πi * (h*x_j + k*y_j + l*z_j))
+            # F(hkl) = sum_j f_j(hkl) * exp(2πi * (h*x_j + k*y_j + l*z_j))
             hkl_dot_pos = torch.matmul(self.hkl_indices, crystal_pos.T)  # [num_hkl, num_atoms]
             phase_angles = 2 * np.pi * hkl_dot_pos  # [num_hkl, num_atoms]
-            
+
             # Calculate real and imaginary parts
             cos_phases = torch.cos(phase_angles)  # [num_hkl, num_atoms]
             sin_phases = torch.sin(phase_angles)  # [num_hkl, num_atoms]
-            
-            # Weight by atomic form factors and sum over atoms
-            real_parts = torch.sum(crystal_form_factors[None, :] * cos_phases, dim=1)  # [num_hkl]
-            imag_parts = torch.sum(crystal_form_factors[None, :] * sin_phases, dim=1)  # [num_hkl]
-            
+
+            # Weight by per-HKL form factors and sum over atoms
+            # crystal_form_factors is [num_atoms, num_hkl], we need [num_hkl, num_atoms]
+            crystal_form_factors_T = crystal_form_factors.T  # [num_hkl, num_atoms]
+
+            real_parts = torch.sum(crystal_form_factors_T * cos_phases, dim=1)  # [num_hkl]
+            imag_parts = torch.sum(crystal_form_factors_T * sin_phases, dim=1)  # [num_hkl]
+
             structure_factors[batch_idx, :, 0] = real_parts
             structure_factors[batch_idx, :, 1] = imag_parts
-        
+
         return structure_factors
 
 
@@ -247,14 +276,16 @@ class DiffractionIntegration(nn.Module):
         # Initialize HKL selector and get indices
         hkl_selector = HKLSelector(max_hkl=max_hkl, num_indices=num_hkl)
         self.hkl_indices = hkl_selector.hkl_indices
-        
+
         # Structure factor calculator
         self.structure_factor_calc = StructureFactorCalculator(
             self.hkl_indices, node_features
         )
-        
+
         # Diffraction fusion layer
-        diffraction_features = num_hkl * 2  # Real and imaginary parts
+        # Use actual number of HKL indices (may be different due to symmetry closure)
+        actual_num_hkl = self.hkl_indices.shape[0]
+        diffraction_features = actual_num_hkl * 2  # Real and imaginary parts
         self.fusion_layer = DiffractionFusionLayer(
             graph_features, diffraction_features, output_features, use_residual=True
         )
