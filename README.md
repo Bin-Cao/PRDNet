@@ -9,7 +9,7 @@
 - **Pseudo-particle Ray Diffraction** physics integration
 - **Multi-head Attention** mechanisms
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Installation
 

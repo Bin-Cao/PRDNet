@@ -1,6 +1,6 @@
-# Contributing to PRDNET
+# Contributing to PRDNet
 
-Thank you for your interest in contributing to PRDNET! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to PRDNet! This document provides guidelines for contributing to the project.
 
 ## Table of Contents
 
@@ -29,8 +29,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 1. **Fork and clone the repository:**
    ```bash
-   git clone https://github.com/your-username/PRDNET.git
-   cd PRDNET
+   git clone https://github.com/your-username/PRDNet.git
+   cd PRDNet
    ```
 
 2. **Create a development environment:**
@@ -92,7 +92,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ```python
 def train_model(config: TrainingConfig, data_loader: DataLoader) -> Dict[str, float]:
-    """Train a PRDNET model with the given configuration.
+    """Train a PRDNet model with the given configuration.
     
     Args:
         config: Training configuration object containing hyperparameters
@@ -227,4 +227,4 @@ If you have questions about contributing, please:
 2. Create a new issue with the "question" label
 3. Contact the maintainers
 
-Thank you for contributing to PRDNET!
+Thank you for contributing to PRDNet!
