@@ -1,8 +1,9 @@
 # PRDNet: Pseudo-particle Ray Diffraction Network
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![arXiv](https://img.shields.io/badge/arXiv-PDF-b31b1b.svg)](https://arxiv.org/pdf/2509.21778)
+[![ICLR 2026](https://img.shields.io/badge/ICLR-OpenReview-4b44ce.svg)](https://openreview.net/forum?id=OfmurJrzlT)
+
 
 **PRDNet** is a physics-informed graph neural network for crystal property prediction that combines:
 - **Graph Neural Networks** for crystal structure representation
@@ -22,7 +23,7 @@ cd PRDNet
 pip install -r requirements.txt
 
 # Verify installation
-python -c "import prdnet; print('✅ PRDNet installed successfully!')"
+python -c "import prdnet; print('PRDNet installed successfully!')"
 ```
 
 ### 2. Prepare Data
