@@ -119,20 +119,6 @@ config = create_trainer_config(
 )
 ```
 
-### Memory Optimization
-
-For limited GPU memory:
-
-```python
-# Reduce model size
-model_config={
-    "conv_layers": 4,
-    "node_features": 128,
-    "diffraction_max_hkl": 3,
-}
-batch_size=16
-```
-
 ## Advanced Usage
 
 ### Distributed Training
@@ -220,14 +206,11 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Citation
 
 ```bibtex
-@misc{cao2025structureinvariantcrystalproperty,
-      title={Beyond Structure: Invariant Crystal Property Prediction with Pseudo-Particle Ray Diffraction},
-      author={Bin Cao and Yang Liu and Longhan Zhang and Yifan Wu and Zhixun Li and Yuyu Luo and Hong Cheng and Yang Ren and Tong-Yi Zhang},
-      year={2025},
-      eprint={2509.21778},
-      archivePrefix={arXiv},
-      primaryClass={cond-mat.mtrl-sci},
-      url={https://arxiv.org/abs/2509.21778},
+@article{cao2025beyond,
+  title={Beyond Structure: Invariant Crystal Property Prediction with Pseudo-Particle Ray Diffraction},
+  author={Cao, Bin and Liu, Yang and Zhang, Longhan and Wu, Yifan and Li, Zhixun and Luo, Yuyu and Cheng, Hong and Ren, Yang and Zhang, Tong-Yi},
+  booktitle={The Thirteenth International Conference on Learning Representations},
+  year={2026}
 }
 ```
 
