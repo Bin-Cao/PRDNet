@@ -4,7 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![ICLR 2026](https://img.shields.io/badge/ICLR-OpenReview-4b44ce.svg)](https://openreview.net/forum?id=OfmurJrzlT)
 
-<img width="1238" height="577" alt="Screenshot 2026-01-31 at 12 01 13" src="https://github.com/user-attachments/assets/47396371-c413-418d-a1db-e90d6ed11c61" />
+<img width="738"  alt="Screenshot 2026-01-31 at 12 01 13" src="https://github.com/user-attachments/assets/47396371-c413-418d-a1db-e90d6ed11c61" />
+
 **PRDNet** is a physics-informed graph neural network for crystal property prediction that combines:
 - **Graph Neural Networks** for crystal structure representation
 - **Pseudo-particle Ray Diffraction** physics integration
