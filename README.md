@@ -212,7 +212,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 @article{cao2025beyond,
   title={Beyond Structure: Invariant Crystal Property Prediction with Pseudo-Particle Ray Diffraction},
   author={Cao, Bin and Liu, Yang and Zhang, Longhan and Wu, Yifan and Li, Zhixun and Luo, Yuyu and Cheng, Hong and Ren, Yang and Zhang, Tong-Yi},
-  booktitle={The Thirteenth International Conference on Learning Representations},
+  booktitle={The Fourteenth International Conference on Learning Representations},
   year={2026}
 }
 ```
