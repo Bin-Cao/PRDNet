@@ -181,7 +181,10 @@ class Prdnet(nn.Module):
         # Build multiple FC layers based on config
         if config.fc_layers > 1:
             # First layer
-            self.fc_layers.append(nn.Linear(config.node_features, config.fc_features))
+            if self.use_diffraction:
+                self.fc_layers.append(nn.Linear(config.fc_features, config.fc_features))
+            else:
+                self.fc_layers.append(nn.Linear(config.node_features, config.fc_features))
             if config.use_layer_norm:
                 self.fc_norms.append(nn.LayerNorm(config.fc_features))
             self.fc_dropouts.append(nn.Dropout(config.dropout))
@@ -214,7 +217,7 @@ class Prdnet(nn.Module):
         if self.use_diffraction:
             self.diffraction_integration = DiffractionIntegration(
                 node_features=config.node_features,
-                graph_features=config.fc_features,
+                graph_features=config.node_features,
                 output_features=config.fc_features,
                 max_hkl=config.diffraction_max_hkl,
                 num_hkl=config.diffraction_num_hkl
