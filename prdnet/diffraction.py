@@ -121,60 +121,49 @@ class StructureFactorCalculator(nn.Module):
             nn.Linear(128, self.num_hkl)  # Output dimension is Nhkl
         )
     
-    def forward(self, node_features: torch.Tensor, pos: torch.Tensor,
-                batch: torch.Tensor, lattice: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(
+        self,
+        node_features: torch.Tensor,
+        pos: torch.Tensor,
+        batch: torch.Tensor,
+        lattice: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
         """
         Calculate structure factors with per-HKL form factors.
-
+    
         Args:
             node_features: Node features from graph [num_nodes, node_features]
             pos: Atomic positions [num_nodes, 3]
             batch: Batch indices [num_nodes]
             lattice: Lattice parameters [batch_size, 6] (optional)
-
+    
         Returns:
             Structure factor map [batch_size, num_hkl, 2] (real and imaginary parts)
         """
-        batch_size = batch.max().item() + 1
-        num_hkl = self.hkl_indices.shape[0]
-        device = node_features.device
-
-        # Calculate per-HKL form factors from node features
-        # f*i(H) = MLPform(h(L)1) ∈ R^(Nhkl)
-        form_factors_per_hkl = self.form_factor_net(node_features)  # [num_nodes, num_hkl]
-
-        # Initialize structure factor tensor
-        structure_factors = torch.zeros(batch_size, num_hkl, 2, device=device)
-
-        # Calculate structure factors for each crystal in the batch
-        for batch_idx in range(batch_size):
-            # Get atoms for this crystal
-            mask = batch == batch_idx
-            if not mask.any():
-                continue
-
-            crystal_pos = pos[mask]  # [num_atoms_in_crystal, 3]
-            crystal_form_factors = form_factors_per_hkl[mask]  # [num_atoms_in_crystal, num_hkl]
-
-            # Calculate structure factors for all HKL indices
-            # F(hkl) = sum_j f_j(hkl) * exp(2πi * (h*x_j + k*y_j + l*z_j))
-            hkl_dot_pos = torch.matmul(self.hkl_indices, crystal_pos.T)  # [num_hkl, num_atoms]
-            phase_angles = 2 * np.pi * hkl_dot_pos  # [num_hkl, num_atoms]
-
-            # Calculate real and imaginary parts
-            cos_phases = torch.cos(phase_angles)  # [num_hkl, num_atoms]
-            sin_phases = torch.sin(phase_angles)  # [num_hkl, num_atoms]
-
-            # Weight by per-HKL form factors and sum over atoms
-            # crystal_form_factors is [num_atoms, num_hkl], we need [num_hkl, num_atoms]
-            crystal_form_factors_T = crystal_form_factors.T  # [num_hkl, num_atoms]
-
-            real_parts = torch.sum(crystal_form_factors_T * cos_phases, dim=1)  # [num_hkl]
-            imag_parts = torch.sum(crystal_form_factors_T * sin_phases, dim=1)  # [num_hkl]
-
-            structure_factors[batch_idx, :, 0] = real_parts
-            structure_factors[batch_idx, :, 1] = imag_parts
-
+        batch_size = int(batch.max()) + 1
+        hkl = self.hkl_indices.to(dtype=pos.dtype)
+    
+        # [num_nodes, num_hkl]
+        form_factors_per_hkl = self.form_factor_net(node_features)
+    
+        # phase_angles[n, h] = 2π * <pos[n], hkl[h]>
+        # [num_nodes, 3] @ [3, num_hkl] -> [num_nodes, num_hkl]
+        phase_angles = (pos @ hkl.T) * (2.0 * torch.pi)
+    
+        cos_phases = torch.cos(phase_angles)
+        sin_phases = torch.sin(phase_angles)
+    
+        real_contrib = form_factors_per_hkl * cos_phases   # [num_nodes, num_hkl]
+        imag_contrib = form_factors_per_hkl * sin_phases   # [num_nodes, num_hkl]
+    
+        # Aggregate by crystal
+        real_parts = form_factors_per_hkl.new_zeros(batch_size, self.num_hkl)
+        imag_parts = form_factors_per_hkl.new_zeros(batch_size, self.num_hkl)
+    
+        real_parts.index_add_(0, batch, real_contrib)
+        imag_parts.index_add_(0, batch, imag_contrib)
+    
+        structure_factors = torch.stack((real_parts, imag_parts), dim=-1)
         return structure_factors
 
 
