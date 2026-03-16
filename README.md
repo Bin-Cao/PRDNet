@@ -221,12 +221,11 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## Contact
+## Contributors
 
-- **Author**: Bin Cao
-- **Email**: bcao686@connect.hkust-gz.edu.cn
-- **Affiliations**: HKUST(GZ), CityU HK
-
+<a href="https://github.com/Bin-Cao/PRDNet/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Bin-Cao/PRDNet" />
+</a>
 
 
 
