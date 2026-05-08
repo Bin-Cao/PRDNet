@@ -4,6 +4,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![ICLR 2026](https://img.shields.io/badge/ICLR-OpenReview-4b44ce.svg)](https://openreview.net/forum?id=OfmurJrzlT)
 
+
+> [!IMPORTANT]
+> **PRDNet is among the first crystal graph learning frameworks to explicitly integrate reciprocal-space diffraction physics into crystal property prediction.**  
+> While most existing materials AI models rely purely on real-space atomic graphs, PRDNet introduces a fundamentally different paradigm by coupling graph representations with a learnable pseudo-particle diffraction mechanism in reciprocal space. Instead of depending solely on local message passing, PRDNet generates synthetic diffraction patterns that encode long-range structural interactions and remain fully invariant to crystallographic symmetries. This design directly addresses one of the most fundamental limitations of conventional graph neural networks: the inability to robustly distinguish crystals with similar local environments but different global periodic structures.
+
+
+
 <img width="638"  alt="Screenshot 2026-01-31 at 12 01 13" src="https://github.com/user-attachments/assets/47396371-c413-418d-a1db-e90d6ed11c61" />
 
 **PRDNet** is a physics-informed graph neural network for crystal property prediction that combines:
