@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">PRDNet logo</title>
+  <desc id="desc">A crystal lattice emitting diffraction rays</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="10" x2="110" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#182b52"/>
+      <stop offset="1" stop-color="#4b44ce"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <g stroke="#9fe7ff" stroke-width="3" opacity=".8">
+    <path d="M23 81 50 65l28 16-27 16zM50 65V34l28 16v31M78 81l27-16V34L78 50" fill="none"/>
+    <path d="m23 50 27-16 28 16 27-16" fill="none"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="50" cy="34" r="6"/><circle cx="23" cy="50" r="6"/><circle cx="78" cy="50" r="6"/>
+    <circle cx="105" cy="34" r="6"/><circle cx="50" cy="65" r="6"/><circle cx="105" cy="65" r="6"/>
+    <circle cx="23" cy="81" r="6"/><circle cx="78" cy="81" r="6"/><circle cx="50" cy="97" r="6"/>
+  </g>
+  <g stroke="#ffd166" stroke-linecap="round" stroke-width="4">
+    <path d="M89 103h20M94 94l15 15M94 112l15-15"/>
+  </g>
+</svg>

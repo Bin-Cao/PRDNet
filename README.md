@@ -1,8 +1,19 @@
+<p align="center">
+  <img src="docs/logo.svg" width="92" alt="PRDNet logo" />
+</p>
+
 # PRDNet: Pseudo-particle Ray Diffraction Network
 
+<p align="center">
+  <a href="docs/README.en.md">English</a> ·
+  <a href="docs/README.zh-CN.md">简体中文</a> ·
+  <a href="docs/README.ja.md">日本語</a> ·
+  <a href="docs/README.ko.md">한국어</a>
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![ICLR 2026](https://img.shields.io/badge/ICLR-OpenReview-4b44ce.svg)](https://openreview.net/forum?id=OfmurJrzlT)
+[![GitHub stars](https://img.shields.io/github/stars/Bin-Cao/PRDNet?style=flat&logo=github)](https://github.com/Bin-Cao/PRDNet/stargazers)
 
 
 > [!IMPORTANT]
@@ -233,6 +244,4 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 <a href="https://github.com/Bin-Cao/PRDNet/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Bin-Cao/PRDNet" />
 </a>
-
-
 
